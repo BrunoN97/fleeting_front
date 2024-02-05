@@ -4,6 +4,11 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: #000;
+  background-image: url("https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-y: 20px;
 }
 
 a {
@@ -22,5 +27,9 @@ a {
   body {
     color: white;
     background: black;
+    background-image: url("https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-position-y: 20px;
   }
 }
