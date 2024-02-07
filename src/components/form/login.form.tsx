@@ -5,6 +5,8 @@ import styles from "../../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -22,8 +24,16 @@ export function LoginForm() {
     resolver: zodResolver(loginSchema),
   });
 
-  function handleLogin(data: LoginSchema) {
-    console.log(data);
+  const { signIn } = useContext(AuthContext);
+
+  async function handleLogin(data: LoginSchema) {
+    try {
+      await signIn(data);
+      console.log("certo");
+    } catch (error) {
+      console.log("error");
+      console.log(error);
+    }
   }
 
   return (

@@ -5,6 +5,8 @@ import styles from "../../../styles/login.module.css";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createUser } from "../../service/LoginService";
+import AlertSucess from "../alert/alert-sucess";
 
 const createLoginSchema = z.object({
   name: z.string(),
@@ -24,6 +26,12 @@ export function CreateLoginForm() {
   });
 
   function handleCreateLogin(data: CreateLoginSchema) {
+    try {
+      const response = createUser(data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
     console.log(data);
   }
 

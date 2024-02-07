@@ -1,0 +1,50 @@
+import { createContext, useState } from "react";
+import { authenticatedLogin } from "../service/LoginService";
+import { setCookie } from "nookies";
+import Router from "next/router";
+
+type SignInData = {
+  email: string;
+  password: string;
+};
+
+type User = {
+  email: string;
+};
+
+type AuthContextType = {
+  user: User;
+  isAuthenticated: boolean;
+  signIn: (data: SignInData) => Promise<void>;
+};
+
+export const AuthContext = createContext({} as AuthContextType);
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState<User | null>(null);
+
+  const isAuthenticated = !!user;
+
+  async function signIn({ email, password }: SignInData) {
+    const { token_acess, email: user } = await authenticatedLogin({
+      email,
+      password,
+    });
+    console.log("token e user");
+    console.log(token_acess, user);
+
+    setCookie(undefined, "fleeting-token", token_acess, {
+      maxAge: 60 * 60 * 24, // 24h
+    });
+
+    setUser(user);
+
+    Router.push("/");
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
