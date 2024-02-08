@@ -1,3 +1,5 @@
+import ResponsiveAppBar from "../src/components/appBar/appBar";
+import CustomPaginationActionsTable from "../src/components/table/tableToDo";
 import { AuthProvider } from "../src/context/AuthContext";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";

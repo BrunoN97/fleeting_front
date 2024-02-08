@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { parseCookies } from "nookies";
 
 const { "fleeting-token": token } = parseCookies();
@@ -19,17 +19,10 @@ type dataAuth = {
   password: string;
 };
 
-type resToken = {
-  token: string;
-  emailtype: string;
-};
-
 const authenticatedLogin = async (dataAuth: dataAuth) => {
   const response = (await apiService.post("/authentication/login", dataAuth))
     .data;
 
-  console.log(response);
-  console.log("response");
   return response;
 };
 
@@ -38,8 +31,6 @@ const userFindEmail = async (email: string) => {
     await apiService.get("/users/filter", { params: { email: email } })
   ).data;
 
-  console.log(response);
-  console.log("response");
   return response;
 };
 
@@ -48,4 +39,9 @@ const createUser = async (data) => {
   return response.data;
 };
 
-export { authenticatedLogin, userFindEmail, createUser };
+const getToDo = async (limit: number, offset: number) => {
+  const response = await apiService.get(`/todo?limit=${limit}&skip=${offset}`);
+  return { data: response.data[0], total: response.data[1] };
+};
+
+export { authenticatedLogin, userFindEmail, createUser, getToDo };

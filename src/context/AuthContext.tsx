@@ -39,8 +39,6 @@ export function AuthProvider({ children }) {
       email,
       password,
     });
-    console.log("token e user");
-    console.log(token_acess, user);
 
     setCookie(undefined, "fleeting-token", token_acess, {
       maxAge: 60 * 60 * 24, // 24h

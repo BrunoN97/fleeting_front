@@ -29,9 +29,7 @@ export function LoginForm() {
   async function handleLogin(data: LoginSchema) {
     try {
       await signIn(data);
-      console.log("certo");
     } catch (error) {
-      console.log("error");
       console.log(error);
     }
   }

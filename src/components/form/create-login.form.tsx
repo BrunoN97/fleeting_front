@@ -27,11 +27,9 @@ export function CreateLoginForm() {
   function handleCreateLogin(data: CreateLoginSchema) {
     try {
       const response = createUser(data);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
-    console.log(data);
   }
 
   return (
