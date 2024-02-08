@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUser } from "../../service/LoginService";
-import AlertSucess from "../alert/alert-sucess";
 
 const createLoginSchema = z.object({
   name: z.string(),

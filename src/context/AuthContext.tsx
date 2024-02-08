@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { authenticatedLogin } from "../service/LoginService";
+import { apiService, authenticatedLogin } from "../service/LoginService";
 import { setCookie } from "nookies";
 import Router from "next/router";
 
@@ -25,6 +25,15 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = !!user;
 
+  // useEffect(() => {
+  //   const { "fleeting-token": token } = parseCookies();
+  //   console.log("user hahaha" + user);
+
+  //   if (token) {
+  //     userFindEmail(user).then((response) => setUser(response.email));
+  //   }
+  // }, []);
+
   async function signIn({ email, password }: SignInData) {
     const { token_acess, email: user } = await authenticatedLogin({
       email,
@@ -37,6 +46,7 @@ export function AuthProvider({ children }) {
       maxAge: 60 * 60 * 24, // 24h
     });
 
+    apiService.defaults.headers["Authorization"] = `Bearer ${token_acess}`;
     setUser(user);
 
     Router.push("/");
