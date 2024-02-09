@@ -1,5 +1,4 @@
 .divTable {
-  background-color: #a1b5e6;
   border-radius: 15px;
   padding: 5px 5px;
   margin: 3%;
@@ -7,4 +6,11 @@
 
 .tableToDo {
   border-radius: 15px;
+}
+
+.divFilters {
+  margin: 1%;
+
+  display: flex;
+  justify-content: flex-end;
 }

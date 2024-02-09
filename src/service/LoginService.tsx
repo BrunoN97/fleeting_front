@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { parseCookies } from "nookies";
 
 const { "fleeting-token": token } = parseCookies();
@@ -39,8 +39,26 @@ const createUser = async (data) => {
   return response.data;
 };
 
-const getToDo = async (limit: number, offset: number) => {
-  const response = await apiService.get(`/todo?limit=${limit}&skip=${offset}`);
+const getToDo = async (
+  limit: number,
+  skip: number,
+  status?: string,
+  title?: string
+) => {
+  const params: { [key: string]: any } = { limit, skip };
+
+  if (status) {
+    params.status = status;
+  }
+
+  if (title) {
+    params.title = title;
+  }
+
+  const response = await apiService.get(`/todo`, {
+    params,
+  });
+
   return { data: response.data[0], total: response.data[1] };
 };
 

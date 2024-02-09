@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,6 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
@@ -17,6 +19,8 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 
 import styles from "./tableToDo.module.css";
 import { getToDo } from "../../service/LoginService";
+import { tableCellClasses } from "@mui/material/TableCell";
+import FiltersToDo from "../filters/filtersToDo";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -27,6 +31,25 @@ interface TablePaginationActionsProps {
     newPage: number
   ) => void;
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
   const theme = useTheme();
@@ -98,26 +121,6 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-function createData(name: string, calories: number, fat: number) {
-  return { name, calories, fat };
-}
-
-const rows = [
-  createData("Cupcake", 305, 3.7),
-  createData("Donut", 452, 25.0),
-  createData("Eclair", 262, 16.0),
-  createData("Frozen yoghurt", 159, 6.0),
-  createData("Gingerbread", 356, 16.0),
-  createData("Honeycomb", 408, 3.2),
-  createData("Ice cream sandwich", 237, 9.0),
-  createData("Jelly Bean", 375, 0.0),
-  createData("KitKat", 518, 26.0),
-  createData("Lollipop", 392, 0.2),
-  createData("Marshmallow", 318, 0),
-  createData("Nougat", 360, 19.0),
-  createData("Oreo", 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
 export default function CustomPaginationActionsTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -131,16 +134,15 @@ export default function CustomPaginationActionsTable() {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const result = await getToDo(rowsPerPage, page * rowsPerPage + 1);
+      const result = await getToDo(rowsPerPage, page + 1);
       setTodoData(result);
     };
 
     fetchData();
   }, [page, rowsPerPage]);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - todoData.data.length) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -158,8 +160,20 @@ export default function CustomPaginationActionsTable() {
 
   return (
     <div className={styles.divTable}>
+      <div className={styles.divFilters}>
+        <FiltersToDo label="Status"> status </FiltersToDo>
+        <FiltersToDo label="Titulo"> status </FiltersToDo>
+      </div>
+
       <TableContainer component={Paper} className={styles.tableToDo}>
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Titulo</StyledTableCell>
+              <StyledTableCell align="left">Descricao</StyledTableCell>
+              <StyledTableCell align="left">Status</StyledTableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
             {(rowsPerPage > 0
               ? todoData.data.slice(
@@ -168,17 +182,17 @@ export default function CustomPaginationActionsTable() {
                 )
               : todoData.data
             ).map((row) => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
+              <StyledTableRow key={row.id}>
+                <StyledTableCell component="th" scope="row">
                   {row.title}
-                </TableCell>
-                <TableCell style={{ width: 400 }} align="left">
+                </StyledTableCell>
+                <StyledTableCell style={{ width: 400 }} align="left">
                   {row.description}
-                </TableCell>
-                <TableCell style={{ width: 160 }} align="left">
+                </StyledTableCell>
+                <StyledTableCell style={{ width: 160 }} align="left">
                   {row.status}
-                </TableCell>
-              </TableRow>
+                </StyledTableCell>
+              </StyledTableRow>
             ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
