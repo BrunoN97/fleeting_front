@@ -45,6 +45,10 @@ function ResponsiveAppBar() {
     }
   };
 
+  const handleReRender = () => {
+    Router.reload();
+  };
+
   return (
     <AppBar position="static" className={styles.appBar}>
       <Container maxWidth="xl">
@@ -64,7 +68,10 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <img src="https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png" />
+            <img
+              src="https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png"
+              onClick={handleReRender}
+            />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -117,7 +124,10 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <img src="https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png" />
+            <img
+              src="https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png"
+              onClick={handleReRender}
+            />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <BasicModal />

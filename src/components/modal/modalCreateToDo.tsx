@@ -10,7 +10,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createToDo } from "../../service/LoginService";
-import SimpleAlert from "../alert/alert-sucess";
+import SimpleAlert from "../alert/alert";
 
 const createToDoSchema = z.object({
   loginId: z.string(),
@@ -43,13 +43,13 @@ export default function BasicModal() {
     resolver: zodResolver(createToDoSchema),
   });
 
-  function handleCreateToDo(data: CreateToDoSchema) {
+  async function handleCreateToDo(data: CreateToDoSchema) {
     try {
-      createToDo(data);
+      await createToDo(data);
       setShowAlert(true);
       reset();
     } catch (error) {
-      console.log(error);
+      setShowAlertError(true);
     }
   }
 
@@ -58,16 +58,19 @@ export default function BasicModal() {
   };
 
   const [showAlert, setShowAlert] = React.useState(false);
+  const [showAlertError, setShowAlertError] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
     setShowAlert(false);
+    setShowAlertError(false);
   };
 
   const handleClose = () => {
     setOpen(false);
     setShowAlert(false);
+    setShowAlertError(false);
   };
 
   return (
@@ -81,6 +84,18 @@ export default function BasicModal() {
           aria-describedby="modal-modal-description"
         >
           <form onSubmit={handleSubmit(handleCreateToDo)}>
+            {showAlert && (
+              <SimpleAlert severity="success">
+                {" "}
+                O To-Do foi criado com sucesso.
+              </SimpleAlert>
+            )}
+            {showAlertError && (
+              <SimpleAlert severity="error">
+                {" "}
+                To-Do não criado, campos incorretos.
+              </SimpleAlert>
+            )}
             <Box sx={style} className={styles.divModal}>
               <div className={styles.divCreateToDo}>
                 <div className={styles.title}>
@@ -104,9 +119,6 @@ export default function BasicModal() {
                   </Button>
                 </div>
               </div>
-              {showAlert && (
-                <SimpleAlert> To-Do criado com sucesso</SimpleAlert>
-              )}
             </Box>
           </form>
         </Modal>
