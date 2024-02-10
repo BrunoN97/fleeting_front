@@ -5,6 +5,8 @@ import Modal from "@mui/material/Modal";
 import TextFieldModal from "./inputModal/inputModal";
 import styles from "./modalCreateToDo.module.css";
 import SelectLabels from "./selectModal/selectModal";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -97,6 +99,20 @@ export default function BasicModal() {
               </SimpleAlert>
             )}
             <Box sx={style} className={styles.divModal}>
+              <div>
+                <IconButton
+                  aria-label="close"
+                  onClick={handleClose}
+                  sx={{
+                    position: "absolute",
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </div>
               <div className={styles.divCreateToDo}>
                 <div className={styles.title}>
                   <h2> Criação de ToDo's</h2>
