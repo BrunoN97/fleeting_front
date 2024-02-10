@@ -1,17 +1,17 @@
 import { TextField } from "@mui/material";
 import styles from "./filtersToDo.module.css";
+import React from "react";
 
-export default function FiltersToDo({ children, ...props }) {
+const FiltersToDo = React.forwardRef((props, ref) => {
   return (
-    <div>
-      <TextField
-        id="standard-basic"
-        variant="standard"
-        className={styles.input}
-        {...props}
-      >
-        {children}
-      </TextField>
-    </div>
+    <TextField
+      id="standard-basic"
+      variant="standard"
+      className={styles.input}
+      ref={ref}
+      {...props}
+    ></TextField>
   );
-}
+});
+
+export default FiltersToDo;

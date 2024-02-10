@@ -75,7 +75,7 @@ export default function BasicModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Criar ToDo</Button>
+      <Button onClick={handleOpen}>Criar To-Do</Button>
       <div>
         <Modal
           open={open}

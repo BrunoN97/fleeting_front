@@ -1,6 +1,11 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
+import { z } from "zod";
+import { getToDo } from "../../service/LoginService";
+import { tableCellClasses } from "@mui/material/TableCell";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,11 +21,10 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-
 import styles from "./tableToDo.module.css";
-import { getToDo } from "../../service/LoginService";
-import { tableCellClasses } from "@mui/material/TableCell";
 import FiltersToDo from "../filters/filtersToDo";
+import { useForm } from "react-hook-form";
+import { Button } from "@mui/material";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -31,6 +35,13 @@ interface TablePaginationActionsProps {
     newPage: number
   ) => void;
 }
+
+const filtersSchema = z.object({
+  status: z.string(),
+  title: z.string(),
+});
+
+type FiltersSchema = z.infer<typeof filtersSchema>;
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -122,6 +133,32 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 export default function CustomPaginationActionsTable() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FiltersSchema>({
+    resolver: zodResolver(filtersSchema),
+  });
+
+  const fetchData = async () => {
+    const result = await getToDo(rowsPerPage, page + 1, status, title);
+    setTodoData(result);
+  };
+
+  const [status, setStatus] = React.useState("");
+  const [title, setTitle] = React.useState("");
+
+  async function handleSendFilter(data: FiltersSchema) {
+    if (data.status) {
+      await setStatus(data.status);
+    }
+    if (data.title) {
+      await setTitle(data.title);
+    }
+    setPage(0);
+  }
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [todoData, setTodoData] = React.useState<{
@@ -133,13 +170,8 @@ export default function CustomPaginationActionsTable() {
   });
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      const result = await getToDo(rowsPerPage, page + 1);
-      setTodoData(result);
-    };
-
     fetchData();
-  }, [page, rowsPerPage]);
+  }, [page, rowsPerPage, status, title]);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - todoData.data.length) : 0;
@@ -161,8 +193,17 @@ export default function CustomPaginationActionsTable() {
   return (
     <div className={styles.divTable}>
       <div className={styles.divFilters}>
-        <FiltersToDo label="Status"> status </FiltersToDo>
-        <FiltersToDo label="Titulo"> status </FiltersToDo>
+        <form onSubmit={handleSubmit(handleSendFilter)}>
+          <FiltersToDo label="Status" {...register("status")} />
+          <FiltersToDo label="Titulo" {...register("title")} />
+          <Button
+            type="submit"
+            variant="outlined"
+            className={styles.buttonFilter}
+          >
+            Filtrar
+          </Button>
+        </form>
       </div>
 
       <TableContainer component={Paper} className={styles.tableToDo}>

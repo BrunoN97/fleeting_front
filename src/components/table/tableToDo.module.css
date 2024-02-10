@@ -10,7 +10,12 @@
 
 .divFilters {
   margin: 1%;
-
   display: flex;
   justify-content: flex-end;
+}
+
+.buttonFilter {
+  width: 9em;
+  height: 48px;
+  margin-left: 50px;
 }
