@@ -1,8 +1,10 @@
-import { Alert } from "@mui/material";
+import * as React from "react";
+import Alert from "@mui/material/Alert";
+import CheckIcon from "@mui/icons-material/Check";
 
-export default function AlertSucess({ children, ...props }) {
+export default function SimpleAlert({ children }) {
   return (
-    <Alert variant="filled" severity="success" {...props}>
+    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
       {children}
     </Alert>
   );

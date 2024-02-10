@@ -8,16 +8,13 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import Router from "next/router";
 
 import styles from "./appBar.module.css";
 import { destroyCookie } from "nookies";
-
-const pages = ["Criar ToDos"];
+import BasicModal from "../modal/modalCreateToDo";
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -35,6 +32,7 @@ function ResponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
+    OpenModal();
     setAnchorElNav(null);
   };
 
@@ -98,14 +96,11 @@ function ResponsiveAppBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key={"Criar ToDo"} onClick={handleCloseNavMenu}>
+                <BasicModal />
+              </MenuItem>
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -122,18 +117,10 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            <img src="https://static.wixstatic.com/media/e194a6_5670bb2541844ab39f931363ca75bf94~mv2.png/v1/fill/w_234,h_60,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Fleeting%20ID%20Cor%20Nova-sangria.png" />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            <BasicModal />
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -174,4 +161,9 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
+function OpenModal() {
+  return <BasicModal />;
+}
+
 export default ResponsiveAppBar;

@@ -62,4 +62,9 @@ const getToDo = async (
   return { data: response.data[0], total: response.data[1] };
 };
 
-export { authenticatedLogin, userFindEmail, createUser, getToDo };
+const createToDo = async (data) => {
+  const response = await apiService.post("/todo", data);
+  return response.data;
+};
+
+export { authenticatedLogin, userFindEmail, createUser, getToDo, createToDo };

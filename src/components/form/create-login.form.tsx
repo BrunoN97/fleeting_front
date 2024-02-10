@@ -26,7 +26,7 @@ export function CreateLoginForm() {
 
   function handleCreateLogin(data: CreateLoginSchema) {
     try {
-      const response = createUser(data);
+      createUser(data);
     } catch (error) {
       console.log(error);
     }
