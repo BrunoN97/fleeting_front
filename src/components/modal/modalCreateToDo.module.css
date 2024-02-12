@@ -25,3 +25,17 @@
 .divInputs {
   text-align: center;
 }
+
+.button {
+  color: #1646b2;
+  margin: 1%;
+  width: 150px;
+  background-color: #9bacd6;
+  border-radius: 15px;
+  justify-content: space-around;
+  display: flex;
+}
+
+.iconAdd {
+  color: #558d5a;
+}

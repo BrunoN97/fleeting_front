@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUser } from "../../service/LoginService";
+import React from "react";
+import SimpleAlert from "../alert/alert";
 
 const createLoginSchema = z.object({
   name: z.string(),
@@ -20,20 +22,38 @@ export function CreateLoginForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateLoginSchema>({
     resolver: zodResolver(createLoginSchema),
   });
 
-  function handleCreateLogin(data: CreateLoginSchema) {
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [showAlertError, setShowAlertError] = React.useState(false);
+
+  async function handleCreateLogin(data: CreateLoginSchema) {
     try {
-      createUser(data);
+      await createUser(data);
+      reset();
+      setShowAlert(true);
     } catch (error) {
-      console.log(error);
+      setShowAlertError(true);
     }
   }
 
   return (
     <form onSubmit={handleSubmit(handleCreateLogin)} className={styles.form}>
+      {showAlert && (
+        <SimpleAlert severity="success">
+          {" "}
+          O Usuário foi criado com sucesso.
+        </SimpleAlert>
+      )}
+      {showAlertError && (
+        <SimpleAlert severity="error">
+          {" "}
+          Usuário não criado, campos incorretos.
+        </SimpleAlert>
+      )}
       <Input type="text" placeholder="Seu nome" {...register("name")} />
       {errors.name && <p>{errors.name.message}</p>}
       <Input type="email" placeholder="Seu e-mail" {...register("email")} />
