@@ -14,9 +14,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createToDo } from "../../service/LoginService";
 import { createSvgIcon } from "@mui/material/utils";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const createToDoSchema = z.object({
-  loginId: z.string(),
+  loginId: z.string().optional(),
   title: z.string(),
   description: z.string(),
   status: z.string(),
@@ -54,6 +56,7 @@ const PlusIcon = createSvgIcon(
 );
 
 export default function BasicModal() {
+  const { user } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -65,7 +68,8 @@ export default function BasicModal() {
 
   async function handleCreateToDo(data: CreateToDoSchema) {
     try {
-      await createToDo(data);
+      const todoDataWithId = { ...data, loginId: user.id };
+      await createToDo(todoDataWithId);
       setShowAlert(true);
       reset();
     } catch (error) {
@@ -139,7 +143,6 @@ export default function BasicModal() {
                   <h2> Criação de ToDo's</h2>
                 </div>
                 <div className={styles.divInputs}>
-                  <TextFieldModal label="Login ID" {...register("loginId")} />
                   <TextFieldModal label="Título" {...register("title")} />
                   <TextFieldModal
                     label="Descrição"

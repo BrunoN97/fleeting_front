@@ -1,7 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { apiService, authenticatedLogin } from "../service/LoginService";
-import { setCookie } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 import Router from "next/router";
+import jwt from "jsonwebtoken";
 
 type SignInData = {
   email: string;
@@ -10,6 +11,7 @@ type SignInData = {
 
 type User = {
   email: string;
+  id: string;
 };
 
 type AuthContextType = {
@@ -25,17 +27,23 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = !!user;
 
-  // useEffect(() => {
-  //   const { "fleeting-token": token } = parseCookies();
-  //   console.log("user hahaha" + user);
+  useEffect(() => {
+    const { "fleeting-token": token } = parseCookies();
 
-  //   if (token) {
-  //     userFindEmail(user).then((response) => setUser(response.email));
-  //   }
-  // }, []);
+    const updatedUserFromToken = async () => {
+      if (token) {
+        const decodedToken = jwt.decode(token) as {
+          emailUser: string;
+          sub: string;
+        };
+        setUser({ email: decodedToken.emailUser, id: decodedToken.sub });
+      }
+    };
+    updatedUserFromToken();
+  }, []);
 
   async function signIn({ email, password }: SignInData) {
-    const { token_acess, email: user } = await authenticatedLogin({
+    const { token_acess } = await authenticatedLogin({
       email,
       password,
     });
@@ -45,7 +53,6 @@ export function AuthProvider({ children }) {
     });
 
     apiService.defaults.headers["Authorization"] = `Bearer ${token_acess}`;
-    setUser(user);
 
     await Router.push("/");
     Router.reload();
@@ -57,3 +64,5 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => useContext(AuthContext);
