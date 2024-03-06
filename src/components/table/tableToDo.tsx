@@ -173,9 +173,6 @@ export default function CustomPaginationActionsTable() {
     fetchData();
   }, [page, rowsPerPage, status, title]);
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - todoData.data.length) : 0;
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -216,30 +213,17 @@ export default function CustomPaginationActionsTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(rowsPerPage > 0
-              ? todoData.data.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
-                )
-              : todoData.data
-            ).map((row) => (
+            {todoData.data.map((row) => (
               <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
                   {row.title}
                 </StyledTableCell>
-                <StyledTableCell style={{ width: 400 }} align="left">
+                <StyledTableCell align="left">
                   {row.description}
                 </StyledTableCell>
-                <StyledTableCell style={{ width: 160 }} align="left">
-                  {row.status}
-                </StyledTableCell>
+                <StyledTableCell align="left">{row.status}</StyledTableCell>
               </StyledTableRow>
             ))}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={3} />
-              </TableRow>
-            )}
           </TableBody>
           <TableFooter>
             <TableRow>
